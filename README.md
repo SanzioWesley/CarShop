@@ -25,4 +25,5 @@ O projeto segue uma estrutura organizada em camadas para facilitar a manutençã
 
 1. **Clonar o repositório:**
    ```bash
-   git clone https://github.com/SEU_USUARIO/E-commerce-Carros.git
+   git clone https://github.com/SanzioWesley/CarShop
+   
