@@ -26,5 +26,11 @@ namespace CarShop.API.Models
         public string UrlImagem { get; set; } = string.Empty;
 
         public DateTime DataCadastro { get; set; } = DateTime.Now;
+
+        // Chave estrangeira
+        public int CategoriaId { get; set; }
+
+        // Propriedade de navegação: O carro pertence a uma categoria
+        public virtual Categoria? Categoria { get; set; }
     }
 }
