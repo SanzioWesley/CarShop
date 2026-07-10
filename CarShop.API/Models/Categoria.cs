@@ -9,11 +9,11 @@ namespace CarShop.API.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(30)]
+        [Required(ErrorMessage = "O nome da categoria e obrigatório.")]
+        [MinLength(3, ErrorMessage = "O nome debe ter no mínimo 3 caracteres.")]
         public string Nome { get; set; } = string.Empty;
 
-        [JsonIgnore] // Isso aqui faz o Swagger parar de pedir a lista de carros no POST
+        [JsonIgnore] 
         public virtual ICollection<Carro> Carros { get; set; } = new Collection<Carro>();
     }
 }
