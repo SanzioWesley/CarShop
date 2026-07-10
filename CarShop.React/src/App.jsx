@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import CadastroCarro from './CadastroCarro'
+import CadastroCarro from './components/CadastroCarro'
 
 function App() {
   const [carros, setCarros] = useState([])
@@ -24,6 +24,8 @@ function App() {
 
       {/* Formulário de Cadastro */}
       <CadastroCarro onCarroCadastrado={carregarCarros} />
+
+      
 
       {/* Listagem */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px' }}>
