@@ -2,11 +2,12 @@ import { useState } from 'react';
 import axios from 'axios';
 
 const CadastroCarro = ({ onCarroCadastrado }) => {
+      
     const [carro, setCarro] = useState({
         marca: '', modelo: '', ano: 2024, preco: 0, quilometragem: 0, cor: '', urlImagem: ''
     });
 
-    const API_URL = "https://localhost:XXXX/api/Carros"; // Ajuste a porta!
+    const API_URL = "https://localhost:7201/api/Carros"; // Ajuste a porta!
 
     const handleSubmit = async (e) => {
         e.preventDefault();
