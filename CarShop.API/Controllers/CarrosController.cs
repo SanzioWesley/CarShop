@@ -50,5 +50,26 @@ namespace CarShop.API.Controllers
                 carro
             );
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, Carro carro)
+        {
+            if (id != carro.Id)
+            {
+                return BadRequest();
+            }
+
+            var carroExistente = await _context.Carros.FindAsync(id);
+
+            if (carroExistente == null)
+            {
+                return NotFound();
+            }
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+
+        }
     }
 }
