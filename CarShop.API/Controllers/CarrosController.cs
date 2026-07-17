@@ -71,5 +71,22 @@ namespace CarShop.API.Controllers
             return NoContent();
 
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCarro(int id)
+        {
+            var carro = await _context.Carros.FindAsync(id);
+            if (carro == null)
+            {
+                return NotFound();
+            }
+
+            _context.Carros.Remove(carro);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
     }
+
 }
