@@ -1,64 +1,153 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
-const CadastroCarro = ({ onCarroAdicionado }) => {
-    // ESTADOS: Gavetas para guardar as informações
-    const [categorias, setCategorias] = useState([]); // Gaveta de categorias do banco
-    const [carro, setCarro] = useState({
-        marca: "", modelo: "", ano: "", preco: "", fotoUrl: "", categoriaId: ""
+const CadastroCarro = ({ onCarroCadastrado }) => {
+  const [categorias, setCategorias] = useState([]);
+
+  const [carro, setCarro] = useState({
+    marca: '',
+    modelo: '',
+    ano: '',
+    preco: '',
+    urlImagem: '',
+    categoriaId: ''
+  });
+
+  useEffect(() => {
+    axios
+      .get('https://localhost:7201/api/Categorias')
+      .then(response => {
+        setCategorias(response.data);
+      })
+      .catch(error => {
+        console.error('Erro ao carregar categorias:', error);
+      });
+  }, []);
+
+  const handleChange = event => {
+    const { name, value } = event.target;
+
+    setCarro({
+      ...carro,
+      [name]: value
     });
+  };
 
-    // BUSCA: Quando o componente nasce, ele vai no C# buscar as categorias
-    useEffect(() => {
-        axios.get("https://localhost:7201/api/Categorias")
-            .then(res => setCategorias(res.data))
-            .catch(err => console.error("Erro ao carregar categorias", err));
-    }, []);
+  const handleSubmit = async event => {
+    event.preventDefault();
 
-    // AÇÃO: Atualiza os dados do carro conforme você digita
-    const handleChange = (e) => {
-        setCarro({ ...carro, [e.target.name]: e.target.value });
-    };
+    try {
+      await axios.post(
+        'https://localhost:7201/api/Carros',
+        carro
+      );
 
-    // ENVIO: Manda o carro novo para a API de Carros
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await axios.post("https://localhost:7201/api/Carros", carro);
-            alert("Carro anunciado com sucesso!");
-            setCarro({ marca: "", modelo: "", ano: "", preco: "", fotoUrl: "", categoriaId: "" });
-            onCarroAdicionado(); // Atualiza a lista automaticamente
-        } catch (error) {
-            console.error("Erro ao cadastrar carro", error);
-        }
-    };
+      alert('Carro anunciado com sucesso!');
 
-    return (
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', maxWidth: '400px', margin: 'auto', gap: '10px' }}>
-            <h3>Anunciar Novo Carro</h3>
+      setCarro({
+        marca: '',
+        modelo: '',
+        ano: '',
+        preco: '',
+        urlImagem: '',
+        categoriaId: ''
+      });
 
-            {/* Campos de texto */}
-            <input name="marca" placeholder="Marca" value={carro.marca} onChange={handleChange} required />
-            <input name="modelo" placeholder="Modelo" value={carro.modelo} onChange={handleChange} required />
-            <input name="ano" type="number" placeholder="Ano" value={carro.ano} onChange={handleChange} required />
-            <input name="preco" type="number" placeholder="Preço" value={carro.preco} onChange={handleChange} required />
-            <input name="fotoUrl" placeholder="URL da Foto" value={carro.fotoUrl} onChange={handleChange} required />
+      onCarroCadastrado();
+    } catch (error) {
+      console.error('Erro ao cadastrar carro:', error);
+      alert('Não foi possível cadastrar o carro.');
+    }
+  };
 
-            {/* O PULO DO GATO: O Select que você criou entra aqui! */}
-            <select name="categoriaId" value={carro.categoriaId} onChange={handleChange} required style={{ padding: '8px' }}>
-                <option value="">Selecione a Categoria</option>
-                {categorias.map(cat => (
-                    <option key={cat.id} value={cat.id}>
-                        {cat.nome}
-                    </option>
-                ))}
-            </select>
+  return (
+    <form
+      onSubmit={handleSubmit}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        maxWidth: '400px',
+        margin: '0 auto 30px',
+        gap: '10px'
+      }}
+    >
+      <h3>Anunciar Novo Carro</h3>
 
-            <button type="submit" style={{ backgroundColor: 'green', color: 'white', padding: '10px', cursor: 'pointer' }}>
-                Anunciar Carro
-            </button>
-        </form>
-    );
+      <input
+        name="marca"
+        placeholder="Marca"
+        value={carro.marca}
+        onChange={handleChange}
+        required
+      />
+
+      <input
+        name="modelo"
+        placeholder="Modelo"
+        value={carro.modelo}
+        onChange={handleChange}
+        required
+      />
+
+      <input
+        name="ano"
+        type="number"
+        placeholder="Ano"
+        value={carro.ano}
+        onChange={handleChange}
+        required
+      />
+
+      <input
+        name="preco"
+        type="number"
+        placeholder="Preço"
+        value={carro.preco}
+        onChange={handleChange}
+        required
+      />
+
+      <input
+        name="urlImagem"
+        placeholder="URL da Foto"
+        value={carro.urlImagem}
+        onChange={handleChange}
+        required
+      />
+
+      <select
+        name="categoriaId"
+        value={carro.categoriaId}
+        onChange={handleChange}
+        required
+        style={{ padding: '8px' }}
+      >
+        <option value="">Selecione a Categoria</option>
+
+        {categorias.map(categoria => (
+          <option
+            key={categoria.id}
+            value={categoria.id}
+          >
+            {categoria.nome}
+          </option>
+        ))}
+      </select>
+
+      <button
+        type="submit"
+        style={{
+          backgroundColor: 'green',
+          color: 'white',
+          padding: '10px',
+          border: 'none',
+          cursor: 'pointer'
+        }}
+      >
+        Anunciar Carro
+      </button>
+    </form>
+  );
 };
 
 export default CadastroCarro;
