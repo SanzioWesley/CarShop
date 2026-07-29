@@ -15,11 +15,19 @@ function App() {
   };
 
   const excluirCarro = async (id) => {
+    const confirmou = window. confirm(
+       'Tem certeza que deseja excluir este carro?'
+    );
+    
+    if (!confirmou) {
+      return;
+    }
+    
     try {
       await axios.delete(`${API_URL}/${id}`);
       carregarCarros();
     } catch (error) {
-      console.error(error);
+      console.error('Erro ao excluir carro:', error);
     }
   };
 
