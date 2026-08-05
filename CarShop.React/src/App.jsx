@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import CadastroCarro from './components/CadastroCarro';
 
+
 function App() {
   const [carros, setCarros] = useState([]);
+  const [carroEmEdicao, setCarroEmEdicao] = useState(null);
 
   const API_URL = "https://localhost:7201/api/Carros";
 
@@ -31,6 +33,11 @@ function App() {
     }
   };
 
+  const editarCarro = (id) => {
+    const carroSelecionado = carros.find(carro => carro.id === id);
+    setCarroEmEdicao(carroSelecionado);
+  };
+
   useEffect(() => {
     carregarCarros();
   }, []);
@@ -53,7 +60,10 @@ function App() {
         <h1>🚗 CarShop Admin</h1>
       </header>
 
-      <CadastroCarro onCarroCadastrado={carregarCarros} />
+      <CadastroCarro
+        onCarroCadastrado={carregarCarros}
+        carroEmEdicao={carroEmEdicao}
+      />
 
       <div
         style={{
@@ -99,6 +109,21 @@ function App() {
               </p>
 
               <button
+                onClick={() => editarCarro(carro.id)}
+                style={{
+                  backgroundColor: '#e74c3c',
+                  color: 'white',
+                  border: 'none',
+                  padding: '8px 12px',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                  marginTop: '10px'
+                }}
+              >
+                Editar
+              </button>
+
+              <button
                 onClick={() => excluirCarro(carro.id)}
                 style={{
                   backgroundColor: '#e74c3c',
@@ -120,4 +145,4 @@ function App() {
   );
 }
 
-export default App;
+export default App;   

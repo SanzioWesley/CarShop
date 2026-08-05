@@ -66,6 +66,13 @@ namespace CarShop.API.Controllers
                 return NotFound();
             }
 
+            carroExistente.Marca = carro.Marca;
+            carroExistente.Modelo = carro.Modelo;
+            carroExistente.Ano = carro.Ano;
+            carroExistente.Preco = carro.Preco;
+            carroExistente.UrlImagem = carro.UrlImagem;
+            carroExistente.CategoriaId = carro.CategoriaId;
+
             await _context.SaveChangesAsync();
 
             return NoContent();

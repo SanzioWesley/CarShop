@@ -1,7 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-const CadastroCarro = ({ onCarroCadastrado }) => {
+const CadastroCarro = ({
+  onCarroCadastrado,
+  carroEmEdicao
+}) => {
   const [categorias, setCategorias] = useState([]);
 
   const [carro, setCarro] = useState({
@@ -12,6 +15,21 @@ const CadastroCarro = ({ onCarroCadastrado }) => {
     urlImagem: '',
     categoriaId: ''
   });
+
+  useEffect(() => {
+    if (carroEmEdicao) {
+      setCarro({
+        marca: carroEmEdicao.marca,
+        modelo: carroEmEdicao.modelo,
+        ano: carroEmEdicao.ano,
+        preco: carroEmEdicao.preco,
+        urlImagem: carroEmEdicao.urlImagem,
+        categoriaId: carroEmEdicao.categoriaId
+      });
+    }
+  }, [carroEmEdicao]);
+
+
 
   useEffect(() => {
     axios
@@ -37,12 +55,24 @@ const CadastroCarro = ({ onCarroCadastrado }) => {
     event.preventDefault();
 
     try {
-      await axios.post(
-        'https://localhost:7201/api/Carros',
-        carro
-      );
+      if (carroEmEdicao) {
+        await axios.put(
+          `https://localhost:7201/api/Carros/${carroEmEdicao.id}`,
+          {
+            id: carroEmEdicao.id,
+            ...carro
+          }
+        );
 
-      alert('Carro anunciado com sucesso!');
+        alert('Carro atualizado com sucesso!');
+      } else {
+        await axios.post(
+          'https://localhost:7201/api/Carros',
+          carro
+        );
+
+        alert('Carro anunciado com sucesso!');
+      }
 
       setCarro({
         marca: '',
@@ -55,8 +85,8 @@ const CadastroCarro = ({ onCarroCadastrado }) => {
 
       onCarroCadastrado();
     } catch (error) {
-      console.error('Erro ao cadastrar carro:', error);
-      alert('Não foi possível cadastrar o carro.');
+      console.error('Erro ao salvar carro:', error);
+      alert('Não foi possível salvar o carro.');
     }
   };
 
@@ -71,7 +101,11 @@ const CadastroCarro = ({ onCarroCadastrado }) => {
         gap: '10px'
       }}
     >
-      <h3>Anunciar Novo Carro</h3>
+      <h3>
+        {carroEmEdicao
+          ? 'Editar Carro'
+          : 'Anunciar novo carro'}
+      </h3>
 
       <input
         name="marca"
@@ -134,6 +168,8 @@ const CadastroCarro = ({ onCarroCadastrado }) => {
         ))}
       </select>
 
+
+
       <button
         type="submit"
         style={{
@@ -144,7 +180,9 @@ const CadastroCarro = ({ onCarroCadastrado }) => {
           cursor: 'pointer'
         }}
       >
-        Anunciar Carro
+        {carroEmEdicao
+          ? 'Salvar alteraçoes'
+          : 'Anunciar carro'}
       </button>
     </form>
   );
