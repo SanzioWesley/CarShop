@@ -42,150 +42,151 @@ const CadastroCarro = ({
       });
   }, []);
 
+
   const handleChange = event => {
-    const { name, value } = event.target;
-
-    setCarro({
-      ...carro,
-      [name]: value
-    });
-  };
-
-  const handleSubmit = async event => {
-    event.preventDefault();
-
-    try {
-      if (carroEmEdicao) {
-        await axios.put(
-          `https://localhost:7201/api/Carros/${carroEmEdicao.id}`,
-          {
-            id: carroEmEdicao.id,
-            ...carro
-          }
-        );
-
-        alert('Carro atualizado com sucesso!');
-      } else {
-        await axios.post(
-          'https://localhost:7201/api/Carros',
-          carro
-        );
-
-        alert('Carro anunciado com sucesso!');
-      }
+      const { name, value } = event.target;
 
       setCarro({
-        marca: '',
-        modelo: '',
-        ano: '',
-        preco: '',
-        urlImagem: '',
-        categoriaId: ''
+        ...carro,
+        [name]: value
       });
+    };
 
-      onCarroCadastrado();
-    } catch (error) {
-      console.error('Erro ao salvar carro:', error);
-      alert('Não foi possível salvar o carro.');
-    }
-  };
+    const handleSubmit = async event => {
+      event.preventDefault();
 
-  return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        maxWidth: '400px',
-        margin: '0 auto 30px',
-        gap: '10px'
-      }}
-    >
-      <h3>
-        {carroEmEdicao
-          ? 'Editar Carro'
-          : 'Anunciar novo carro'}
-      </h3>
+      try {
+        if (carroEmEdicao) {
+          await axios.put(
+            `https://localhost:7201/api/Carros/${carroEmEdicao.id}`,
+            {
+              id: carroEmEdicao.id,
+              ...carro
+            }
+          );
 
-      <input
-        name="marca"
-        placeholder="Marca"
-        value={carro.marca}
-        onChange={handleChange}
-        required
-      />
+          alert('Carro atualizado com sucesso!');
+        } else {
+          await axios.post(
+            'https://localhost:7201/api/Carros',
+            carro
+          );
 
-      <input
-        name="modelo"
-        placeholder="Modelo"
-        value={carro.modelo}
-        onChange={handleChange}
-        required
-      />
+          alert('Carro anunciado com sucesso!');
+        }
 
-      <input
-        name="ano"
-        type="number"
-        placeholder="Ano"
-        value={carro.ano}
-        onChange={handleChange}
-        required
-      />
+        setCarro({
+          marca: '',
+          modelo: '',
+          ano: '',
+          preco: '',
+          urlImagem: '',
+          categoriaId: ''
+        });
 
-      <input
-        name="preco"
-        type="number"
-        placeholder="Preço"
-        value={carro.preco}
-        onChange={handleChange}
-        required
-      />
+        onCarroCadastrado();
+      } catch (error) {
+        console.error('Erro ao salvar carro:', error);
+        alert('Não foi possível salvar o carro.');
+      }
+    };
 
-      <input
-        name="urlImagem"
-        placeholder="URL da Foto"
-        value={carro.urlImagem}
-        onChange={handleChange}
-        required
-      />
-
-      <select
-        name="categoriaId"
-        value={carro.categoriaId}
-        onChange={handleChange}
-        required
-        style={{ padding: '8px' }}
-      >
-        <option value="">Selecione a Categoria</option>
-
-        {categorias.map(categoria => (
-          <option
-            key={categoria.id}
-            value={categoria.id}
-          >
-            {categoria.nome}
-          </option>
-        ))}
-      </select>
-
-
-
-      <button
-        type="submit"
+    return (
+      <form
+        onSubmit={handleSubmit}
         style={{
-          backgroundColor: 'green',
-          color: 'white',
-          padding: '10px',
-          border: 'none',
-          cursor: 'pointer'
+          display: 'flex',
+          flexDirection: 'column',
+          maxWidth: '400px',
+          margin: '0 auto 30px',
+          gap: '10px'
         }}
       >
-        {carroEmEdicao
-          ? 'Salvar alteraçoes'
-          : 'Anunciar carro'}
-      </button>
-    </form>
-  );
-};
+        <h3>
+          {carroEmEdicao
+            ? 'Editar Carro'
+            : 'Anunciar novo carro'}
+        </h3>
 
-export default CadastroCarro;
+        <input
+          name="marca"
+          placeholder="Marca"
+          value={carro.marca}
+          onChange={handleChange}
+          required
+        />
+
+        <input
+          name="modelo"
+          placeholder="Modelo"
+          value={carro.modelo}
+          onChange={handleChange}
+          required
+        />
+
+        <input
+          name="ano"
+          type="number"
+          placeholder="Ano"
+          value={carro.ano}
+          onChange={handleChange}
+          required
+        />
+
+        <input
+          name="preco"
+          type="number"
+          placeholder="Preço"
+          value={carro.preco}
+          onChange={handleChange}
+          required
+        />
+
+        <input
+          name="urlImagem"
+          placeholder="URL da Foto"
+          value={carro.urlImagem}
+          onChange={handleChange}
+          required
+        />
+
+        <select
+          name="categoriaId"
+          value={carro.categoriaId}
+          onChange={handleChange}
+          required
+          style={{ padding: '8px' }}
+        >
+          <option value="">Selecione a Categoria</option>
+
+          {categorias.map(categoria => (
+            <option
+              key={categoria.id}
+              value={categoria.id}
+            >
+              {categoria.nome}
+            </option>
+          ))}
+        </select>
+
+
+
+        <button
+          type="submit"
+          style={{
+            backgroundColor: 'green',
+            color: 'white',
+            padding: '10px',
+            border: 'none',
+            cursor: 'pointer'
+          }}
+        >
+          {carroEmEdicao
+            ? 'Salvar alteraçoes'
+            : 'Anunciar carro'}
+        </button>
+      </form>
+    );
+  };
+
+  export default CadastroCarro;

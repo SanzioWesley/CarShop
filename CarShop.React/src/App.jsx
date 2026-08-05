@@ -6,6 +6,7 @@ import CadastroCarro from './components/CadastroCarro';
 function App() {
   const [carros, setCarros] = useState([]);
   const [carroEmEdicao, setCarroEmEdicao] = useState(null);
+  const [pesquisa, setPesquisa] = useState('');
 
   const API_URL = "https://localhost:7201/api/Carros";
 
@@ -42,6 +43,12 @@ function App() {
     carregarCarros();
   }, []);
 
+
+  const carrosFiltrados = carros.filter(carro =>
+    carro.marca.toLowerCase().includes(pesquisa.toLowerCase()) ||
+    carro.modelo.toLowerCase().includes(pesquisa.toLowerCase())
+  );
+
   return (
     <div
       style={{
@@ -65,6 +72,12 @@ function App() {
         carroEmEdicao={carroEmEdicao}
       />
 
+      <input
+        value={pesquisa}
+        onChange={(e) => setPesquisa(e.target.value)}
+        placeholder="Pesquisar por marca ou modelo"
+      />
+
       <div
         style={{
           display: 'grid',
@@ -72,10 +85,10 @@ function App() {
           gap: '20px'
         }}
       >
-        {carros.length === 0 ? (
+        {carrosFiltrados.length === 0 ? (
           <p>Nenhum carro cadastrado</p>
         ) : (
-          carros.map(carro => (
+          carrosFiltrados.map(carro => (
             <div
               key={carro.id}
               style={{
