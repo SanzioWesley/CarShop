@@ -174,7 +174,7 @@ const CadastroCarro = ({
         <button
           type="submit"
           style={{
-            backgroundColor: 'green',
+            backgroundColor: carroEmEdicao ? 'orange': 'green',
             color: 'white',
             padding: '10px',
             border: 'none',

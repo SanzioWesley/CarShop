@@ -2,19 +2,28 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import CadastroCarro from './components/CadastroCarro';
 
-
 function App() {
   const [carros, setCarros] = useState([]);
   const [carroEmEdicao, setCarroEmEdicao] = useState(null);
   const [pesquisa, setPesquisa] = useState('');
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
+  const [categorias, setCategorias] = useState([]);
 
-  const API_URL = "https://localhost:7201/api/Carros";
+  const API_URL = 'https://localhost:7201/api/Carros';
+  const CATEGORIAS_URL = 'https://localhost:7201/api/Categorias';
 
   const carregarCarros = () => {
     axios
       .get(API_URL)
       .then(res => setCarros(res.data))
-      .catch(err => console.error(err));
+      .catch(err => console.error('Erro ao carregar carros:', err));
+  };
+
+  const carregarCategorias = () => {
+    axios
+      .get(CATEGORIAS_URL)
+      .then(res => setCategorias(res.data))
+      .catch(err => console.error('Erro ao carregar categorias:', err));
   };
 
   const excluirCarro = async (id) => {
@@ -41,13 +50,20 @@ function App() {
 
   useEffect(() => {
     carregarCarros();
+    carregarCategorias();
   }, []);
 
+  const carrosFiltrados = carros.filter(carro => {
+    const correspondePesquisa =
+      carro.marca.toLowerCase().includes(pesquisa.toLowerCase()) ||
+      carro.modelo.toLowerCase().includes(pesquisa.toLowerCase());
 
-  const carrosFiltrados = carros.filter(carro =>
-    carro.marca.toLowerCase().includes(pesquisa.toLowerCase()) ||
-    carro.modelo.toLowerCase().includes(pesquisa.toLowerCase())
-  );
+    const correspondeCategoria =
+      categoriaSelecionada === '' ||
+      carro.categoriaId === Number(categoriaSelecionada);
+
+    return correspondePesquisa && correspondeCategoria;
+  });
 
   return (
     <div
@@ -72,11 +88,42 @@ function App() {
         carroEmEdicao={carroEmEdicao}
       />
 
-      <input
-        value={pesquisa}
-        onChange={(e) => setPesquisa(e.target.value)}
-        placeholder="Pesquisar por marca ou modelo"
-      />
+      <div
+        style={{
+          display: 'flex',
+          gap: '10px',
+          marginBottom: '20px'
+        }}
+      >
+        <input
+          value={pesquisa}
+          onChange={(e) => setPesquisa(e.target.value)}
+          placeholder="Pesquisar por marca ou modelo"
+          style={{
+            padding: '10px',
+            width: '210px'
+          }}
+        />
+
+        <select
+          value={categoriaSelecionada}
+          onChange={(e) => setCategoriaSelecionada(e.target.value)}
+          style={{
+            padding: '10px'
+          }}
+        >
+          <option value="">Todas as categorias</option>
+
+          {categorias.map(categoria => (
+            <option
+              key={categoria.id}
+              value={categoria.id}
+            >
+              {categoria.nome}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div
         style={{
@@ -99,7 +146,7 @@ function App() {
               }}
             >
               <img
-                src={carro.urlImagem || "https://via.placeholder.com/150"}
+                src={carro.urlImagem || 'https://via.placeholder.com/150'}
                 alt={carro.modelo}
                 style={{
                   width: '100%',
@@ -124,13 +171,13 @@ function App() {
               <button
                 onClick={() => editarCarro(carro.id)}
                 style={{
-                  backgroundColor: '#e74c3c',
+                  backgroundColor: '#3498db',
                   color: 'white',
                   border: 'none',
                   padding: '8px 12px',
                   borderRadius: '5px',
                   cursor: 'pointer',
-                  marginTop: '10px'
+                  marginRight: '8px'
                 }}
               >
                 Editar
@@ -144,8 +191,7 @@ function App() {
                   border: 'none',
                   padding: '8px 12px',
                   borderRadius: '5px',
-                  cursor: 'pointer',
-                  marginTop: '10px'
+                  cursor: 'pointer'
                 }}
               >
                 Excluir
@@ -158,4 +204,4 @@ function App() {
   );
 }
 
-export default App;   
+export default App;
