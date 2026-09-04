@@ -127,21 +127,11 @@ function App() {
         </select>
       </div>
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-          gap: '20px'
-        }}
-      >
-        <CatalogoCarros
-          carros={carrosFiltrados}
-          editarCarro={editarCarro}
-          excluirCarro={excluirCarro}
-        />
-      </div>
-
-
+      <CatalogoCarros
+        carros={carrosFiltrados}
+        editarCarro={editarCarro}
+        excluirCarro={excluirCarro}
+      />
     </div>
   );
 }

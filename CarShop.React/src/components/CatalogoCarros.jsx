@@ -5,7 +5,13 @@ function CatalogoCarros({
     excluirCarro
 }) {
     return (
-        <div>
+        <div
+            style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)'
+
+            }}
+        >
             {carros.length === 0 ? (
                 <p>Nenhum carro cadastrado</p>
             ) : (
@@ -16,11 +22,12 @@ function CatalogoCarros({
                             backgroundColor: 'white',
                             borderRadius: '10px',
                             padding: '15px',
-                            textAlign: 'center'
+                            textAlign: 'center',
+
                         }}
                     >
                         <img
-                            src={carro.urlImagem || 'https://via.placeholder.com/150'}
+                            src={carro.urlImagem}
                             alt={carro.modelo}
                             style={{
                                 width: '100%',
@@ -39,7 +46,7 @@ function CatalogoCarros({
                                 fontWeight: 'bold'
                             }}
                         >
-                            np            R$ {carro.preco.toLocaleString('pt-BR')}
+                            R$ {carro.preco.toLocaleString('pt-BR')}
                         </p>
 
                         <button

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarShop.API.Controllers
 {
+    //locahost:xxxx/api/Carros
     [ApiController]
     [Route("api/[controller]")]
     public class CarrosController : ControllerBase
