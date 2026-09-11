@@ -10,10 +10,10 @@ namespace CarShop.API.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "O nome da categoria e obrigatório.")]
-        [MinLength(3, ErrorMessage = "O nome debe ter no mínimo 3 caracteres.")]
+        [MaxLength(30, ErrorMessage = "O nome deve ter no máximo 30 caracteres.")]
         public string Nome { get; set; } = string.Empty;
 
-        [JsonIgnore] 
+        [JsonIgnore]
         public virtual ICollection<Carro> Carros { get; set; } = new Collection<Carro>();
     }
 }
