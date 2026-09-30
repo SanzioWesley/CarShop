@@ -1,16 +1,20 @@
 ﻿using CarShop.API.DTOs;
-using Microsoft.AspNetCore.Mvc;
 using CarShop.API.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly IAuthService _authService;
 
-    public AuthController(IAuthService authService)
+    private readonly IAuthService _authService;
+    private readonly UserManager<IdentityUser> _userManager;
+
+    public AuthController(IAuthService authService, UserManager<IdentityUser> userManager)
     {
         _authService = authService;
+        _userManager = userManager;
     }
 
     [HttpPost("login")]
@@ -19,5 +23,26 @@ public class AuthController : ControllerBase
         var result = await _authService.Login(model);
 
         return Ok(result);
+    }
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(LoginDto model)
+    {
+        var user = new IdentityUser
+        {
+            UserName = model.Email,
+            Email = model.Email
+        };
+
+        var result = await _userManager.CreateAsync(
+            user,
+            model.Password
+        );
+
+        if (!result.Succeeded)
+        {
+            return BadRequest(result.Errors);
+        }
+
+        return Ok("Usuário criado");
     }
 }
