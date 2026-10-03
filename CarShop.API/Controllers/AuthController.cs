@@ -7,11 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-
     private readonly IAuthService _authService;
     private readonly UserManager<IdentityUser> _userManager;
 
-    public AuthController(IAuthService authService, UserManager<IdentityUser> userManager)
+    public AuthController(
+        IAuthService authService,
+        UserManager<IdentityUser> userManager)
     {
         _authService = authService;
         _userManager = userManager;
@@ -20,10 +21,16 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto model)
     {
-        var result = await _authService.Login(model);
+        var token = await _authService.Login(model);
 
-        return Ok(result);
+        if (token == null)
+        {
+            return Unauthorized("Email ou senha inválidos");
+        }
+
+        return Ok(new { token });
     }
+
     [HttpPost("register")]
     public async Task<IActionResult> Register(LoginDto model)
     {
@@ -41,6 +48,17 @@ public class AuthController : ControllerBase
         if (!result.Succeeded)
         {
             return BadRequest(result.Errors);
+        }
+
+        // Todo cadastro público começa como Cliente
+        var roleResult = await _userManager.AddToRoleAsync(
+            user,
+            "Cliente"
+        );
+
+        if (!roleResult.Succeeded)
+        {
+            return BadRequest(roleResult.Errors);
         }
 
         return Ok("Usuário criado");

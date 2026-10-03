@@ -1,5 +1,6 @@
 ﻿using CarShop.API.Data;
 using CarShop.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,6 +39,7 @@ namespace CarShop.API.Controllers
             return Ok(carro);
         }
 
+        [Authorize(Roles = "Gerente")]
         [HttpPost]
         public async Task<ActionResult<Carro>> Post(Carro carro)
         {

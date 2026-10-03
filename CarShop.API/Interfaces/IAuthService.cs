@@ -1,6 +1,5 @@
 ﻿using CarShop.API.DTOs;
 
-
 namespace CarShop.API.Interfaces
 {
     public interface IAuthService
