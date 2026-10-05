@@ -1,4 +1,5 @@
 ﻿using CarShop.API.Data;
+using CarShop.API.DTOs;
 using CarShop.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,8 +42,18 @@ namespace CarShop.API.Controllers
 
         [Authorize(Roles = "Gerente")]
         [HttpPost]
-        public async Task<ActionResult<Carro>> Post(Carro carro)
+        public async Task<ActionResult<Carro>> Post(CriarCarroDto dto)
         {
+            var carro = new Carro
+            {
+                Marca = dto.Marca,
+                Modelo = dto.Modelo,
+                Ano = dto.Ano,
+                Preco = dto.Preco,
+                UrlImagem = dto.UrlImagem,
+                CategoriaId = dto.CategoriaId,
+            };
+
             _context.Carros.Add(carro);
 
             await _context.SaveChangesAsync();
