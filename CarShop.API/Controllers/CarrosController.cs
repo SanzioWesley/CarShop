@@ -13,10 +13,12 @@ namespace CarShop.API.Controllers
     public class CarrosController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly CarroService _carroService;
 
-        public CarrosController(AppDbContext context)
+        public CarrosController(AppDbContext context, CarroService carroService)
         {
             _context = context;
+            _carroService = carroService;
         }
 
         [HttpGet]
@@ -44,19 +46,7 @@ namespace CarShop.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Carro>> Post(CriarCarroDto dto)
         {
-            var carro = new Carro
-            {
-                Marca = dto.Marca,
-                Modelo = dto.Modelo,
-                Ano = dto.Ano,
-                Preco = dto.Preco,
-                UrlImagem = dto.UrlImagem,
-                CategoriaId = dto.CategoriaId,
-            };
-
-            _context.Carros.Add(carro);
-
-            await _context.SaveChangesAsync();
+            var carro = await _carroService.Criar(dto);
 
             return CreatedAtAction(
                 nameof(GetById),

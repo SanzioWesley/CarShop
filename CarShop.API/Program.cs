@@ -95,6 +95,8 @@ builder.Services.AddCors(options =>
 
 // Injeção de dependência
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<CarroService>();
+
 
 var app = builder.Build();
 
