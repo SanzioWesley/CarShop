@@ -55,33 +55,21 @@ namespace CarShop.API.Controllers
             );
         }
 
+
+        [Authorize(Roles = "Gerente")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, Carro carro)
         {
-            if (id != carro.Id)
-            {
-                return BadRequest();
-            }
+            var carroAtualizado = await _carroService.Atualizar(id, carro);
 
-            var carroExistente = await _context.Carros.FindAsync(id);
-
-            if (carroExistente == null)
+            if (carroAtualizado == null)
             {
                 return NotFound();
             }
 
-            carroExistente.Marca = carro.Marca;
-            carroExistente.Modelo = carro.Modelo;
-            carroExistente.Ano = carro.Ano;
-            carroExistente.Preco = carro.Preco;
-            carroExistente.UrlImagem = carro.UrlImagem;
-            carroExistente.CategoriaId = carro.CategoriaId;
-
-            await _context.SaveChangesAsync();
-
             return NoContent();
-
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCarro(int id)
