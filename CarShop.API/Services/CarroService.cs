@@ -30,6 +30,23 @@ public class CarroService
         return carro;
     }
 
+    public async Task<bool> Excluir(int id)
+    {
+       var carro = await _context.Carros.FindAsync(id);
+
+        if (carro == null)
+        {
+            return false;
+        }
+
+        _context.Carros.Remove(carro);
+
+        await _context.SaveChangesAsync();
+
+        return true;
+
+    }
+
     public async Task<Carro?> Atualizar(int id, Carro carro)
     {
         var carroExistente = await _context.Carros.FindAsync(id);

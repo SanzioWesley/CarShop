@@ -70,20 +70,19 @@ namespace CarShop.API.Controllers
             return NoContent();
         }
 
-
+        [Authorize(Roles = "Gerente")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCarro(int id)
         {
-            var carro = await _context.Carros.FindAsync(id);
-            if (carro == null)
+            var excluiu = await _carroService.Excluir(id);
+
+            if (excluiu == false)
             {
                 return NotFound();
             }
 
-            _context.Carros.Remove(carro);
-            await _context.SaveChangesAsync();
-
             return NoContent();
+
         }
 
     }
