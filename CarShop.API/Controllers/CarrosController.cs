@@ -58,9 +58,9 @@ namespace CarShop.API.Controllers
 
         [Authorize(Roles = "Gerente")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Carro carro)
+        public async Task<IActionResult> Put(int id, AtualizarCarroDto dto)
         {
-            var carroAtualizado = await _carroService.Atualizar(id, carro);
+            var carroAtualizado = await _carroService.Atualizar(id, dto);
 
             if (carroAtualizado == null)
             {

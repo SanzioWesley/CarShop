@@ -47,7 +47,7 @@ public class CarroService
 
     }
 
-    public async Task<Carro?> Atualizar(int id, Carro carro)
+    public async Task<Carro?> Atualizar(int id, AtualizarCarroDto   dto)
     {
         var carroExistente = await _context.Carros.FindAsync(id);
 
@@ -56,12 +56,12 @@ public class CarroService
             return null;
         }
 
-        carroExistente.Marca = carro.Marca;
-        carroExistente.Modelo = carro.Modelo;
-        carroExistente.Ano = carro.Ano;
-        carroExistente.Preco = carro.Preco;
-        carroExistente.UrlImagem = carro.UrlImagem;
-        carroExistente.CategoriaId = carro.CategoriaId;
+        carroExistente.Marca = dto.Marca;
+        carroExistente.Modelo = dto.Modelo;
+        carroExistente.Ano = dto.Ano;
+        carroExistente.Preco = dto.Preco;
+        carroExistente.UrlImagem = dto.UrlImagem;
+        carroExistente.CategoriaId = dto.CategoriaId;
 
         await _context.SaveChangesAsync();
 
