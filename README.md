@@ -1,29 +1,161 @@
-# 🚗 CarShop API - E-commerce de Veículos
+# 🚗 CarShop
 
-[![.NET](https://img.shields.io/badge/.NET-8.0-blueviolet)](https://dotnet.microsoft.com/download/dotnet/8.0)
-[![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-red)](https://www.microsoft.com/pt-br/sql-server/)
+API REST para gerenciamento de uma loja de veículos, desenvolvida com **C# e ASP.NET Core**.
 
-Este projeto é uma API robusta desenvolvida em **ASP.NET Core** para gerenciar um e-commerce de carros de luxo e veículos em geral. A arquitetura foi pensada para ser escalável, utilizando práticas modernas de mercado.
+O CarShop é um projeto de estudo e portfólio que está evoluindo de um CRUD para uma aplicação mais completa, com **autenticação, autorização, separação de responsabilidades e regras de negócio**.
 
-## 🛠️ Tecnologias Utilizadas
+## 🚀 Funcionalidades
 
-- **Backend:** C# / ASP.NET Core 8.0
-- **Banco de Dados:** Microsoft SQL Server
-- **ORM:** Entity Framework Core (Code First)
-- **Documentação:** Swagger (OpenAPI)
-- **Versionamento:** Git / GitHub
+### Veículos
+- Cadastro de veículos
+- Listagem de veículos
+- Busca por ID
+- Atualização de veículos
+- Exclusão de veículos
+- Associação de veículos a categorias
 
-## 🏗️ Arquitetura e Organização
+### Autenticação e autorização
+- Cadastro de usuários
+- Login de usuários
+- Autenticação com JWT
+- Controle de acesso por roles
+- Roles `Cliente` e `Gerente`
+- Operações administrativas protegidas para `Gerente`
 
-O projeto segue uma estrutura organizada em camadas para facilitar a manutenção e o teste:
-- `Models/`: Entidades principais do domínio.
-- `Data/`: Contexto do banco de dados e configurações do EF Core.
-- `Controllers/`: Endpoints da API para comunicação com o Frontend (React).
-- `Migrations/`: Histórico de versionamento do banco de dados.
+### API
+- DTOs para entrada de dados
+- Validação de dados
+- Separação entre Controllers e Services
+- Persistência com Entity Framework Core
+- Documentação e testes dos endpoints com Swagger
 
-## 🚀 Como Rodar o Projeto
+## 🛠️ Tecnologias
 
-1. **Clonar o repositório:**
-   ```bash
-   git clone https://github.com/SanzioWesley/CarShop
-   
+- C#
+- .NET 8
+- ASP.NET Core Web API
+- Entity Framework Core
+- ASP.NET Core Identity
+- JWT
+- SQL Server
+- Swagger / OpenAPI
+- Git e GitHub
+
+## 🏗️ Arquitetura
+
+O backend está sendo organizado com separação de responsabilidades:
+
+```text
+Cliente
+   ↓
+Controller
+   ↓
+Service
+   ↓
+Entity Framework Core / DbContext
+   ↓
+SQL Server
+```
+
+### Controllers
+Recebem as requisições HTTP, chamam os serviços necessários e retornam as respostas da API.
+
+### Services
+Concentram a lógica da aplicação e realizam as operações necessárias antes da persistência dos dados.
+
+### DTOs
+Definem os dados necessários para entrada e saída da API, evitando utilizar diretamente as entidades em operações onde isso não é necessário.
+
+### Models
+Representam as entidades do domínio da aplicação.
+
+### Data
+Contém o `DbContext` e as configurações relacionadas ao Entity Framework Core e ao banco de dados.
+
+## 🔐 Autenticação e autorização
+
+A autenticação da API utiliza **JWT (JSON Web Token)**.
+
+Após o login, o usuário recebe um token que permite à API identificar o usuário autenticado e sua role.
+
+Atualmente existem duas roles:
+
+```text
+Cliente
+Gerente
+```
+
+Operações administrativas de veículos são protegidas para usuários com a role `Gerente`.
+
+Exemplo:
+
+```csharp
+[Authorize(Roles = "Gerente")]
+```
+
+## 📡 Principais endpoints
+
+### Carros
+
+```http
+GET    /api/Carros
+GET    /api/Carros/{id}
+POST   /api/Carros
+PUT    /api/Carros/{id}
+DELETE /api/Carros/{id}
+```
+
+Os endpoints podem ser visualizados e testados pelo Swagger durante a execução da aplicação.
+
+## ▶️ Como executar
+
+### Pré-requisitos
+
+- .NET 8 SDK
+- SQL Server
+- Git
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/SanzioWesley/CarShop.git
+```
+
+### 2. Entre na pasta do projeto
+
+```bash
+cd CarShop
+```
+
+### 3. Configure o banco de dados
+
+Configure a connection string do SQL Server no arquivo de configuração da aplicação.
+
+### 4. Aplique as migrations
+
+```bash
+dotnet ef database update
+```
+
+### 5. Execute a aplicação
+
+```bash
+dotnet run
+```
+
+A URL da aplicação e do Swagger será exibida no terminal.
+
+## 🗺️ Próximos passos
+
+- Integração da autenticação com o frontend React
+- Carrinho de compras
+- Pedidos
+- Regras de negócio da loja
+- Testes automatizados
+- Deploy da aplicação
+
+## 🎯 Objetivo
+
+O objetivo do CarShop é aplicar, em um projeto prático, conceitos utilizados no desenvolvimento de aplicações **C# / .NET**, passando por API REST, banco de dados, autenticação, autorização e organização da aplicação.
+
+O projeto continuará evoluindo com novas funcionalidades e melhorias de arquitetura.
