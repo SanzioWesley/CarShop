@@ -55,6 +55,12 @@ public class CarroService
         {
             return null;
         }
+        var categoria = await _context.Categorias.FindAsync(dto.CategoriaId);
+
+        if (categoria == null)
+        {
+            return null;
+        }
 
         carroExistente.Marca = dto.Marca;
         carroExistente.Modelo = dto.Modelo;
