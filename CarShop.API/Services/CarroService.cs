@@ -1,6 +1,7 @@
 ﻿using CarShop.API.Data;
 using CarShop.API.DTOs;
 using CarShop.API.Models;
+using CarShop.API.Services;
 
 public class CarroService
 {
@@ -47,19 +48,19 @@ public class CarroService
 
     }
 
-    public async Task<Carro?> Atualizar(int id, AtualizarCarroDto   dto)
+    public async Task<ResultadoAtualizacao> Atualizar(int id, AtualizarCarroDto dto)
     {
         var carroExistente = await _context.Carros.FindAsync(id);
 
         if (carroExistente == null)
         {
-            return null;
+            return ResultadoAtualizacao.CarroNaoEncontrado;
         }
         var categoria = await _context.Categorias.FindAsync(dto.CategoriaId);
 
         if (categoria == null)
         {
-            return null;
+            return ResultadoAtualizacao.CategoriaInvalida;
         }
 
         carroExistente.Marca = dto.Marca;
@@ -71,6 +72,6 @@ public class CarroService
 
         await _context.SaveChangesAsync();
 
-        return carroExistente;
+        return ResultadoAtualizacao.Sucesso;
     }
 }

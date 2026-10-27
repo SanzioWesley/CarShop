@@ -1,6 +1,7 @@
 ﻿using CarShop.API.Data;
 using CarShop.API.DTOs;
 using CarShop.API.Models;
+using CarShop.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -60,12 +61,18 @@ namespace CarShop.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, AtualizarCarroDto dto)
         {
-            var carroAtualizado = await _carroService.Atualizar(id, dto);
+            var resultado = await _carroService.Atualizar(id, dto);
 
-            if (carroAtualizado == null)
+            if (resultado == ResultadoAtualizacao.CarroNaoEncontrado)
             {
                 return NotFound();
             }
+
+
+            if (resultado == ResultadoAtualizacao.CategoriaInvalida)
+            {
+                return BadRequest();
+            }            
 
             return NoContent();
         }
